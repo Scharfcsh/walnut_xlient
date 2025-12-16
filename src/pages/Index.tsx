@@ -1,4 +1,3 @@
-import { HeroSection } from "@/components/dashboard/HeroSection";
 import { AnalyticsDashboard } from "@/components/dashboard/AnalyticsDashboard";
 import { HeroSection2 } from "@/components/dashboard/hero";
 import { Header } from "@/components/dashboard/navbar";
