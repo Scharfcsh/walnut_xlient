@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,12 @@ interface EditableChartFormProps {
 export function EditableChartForm({ data, onSave, onEditStart, disabled, submitLabel = "Save Changes" }: EditableChartFormProps) {
   const [values, setValues] = useState<CallDurationData[]>(data);
   const [hasStartedEditing, setHasStartedEditing] = useState(false);
+
+  // Update form values when data prop changes (e.g., when loading from Supabase)
+  useEffect(() => {
+    setValues(data);
+    setHasStartedEditing(false); // Reset editing state when new data is loaded
+  }, [data]);
 
   const handleChange = (index: number, value: string) => {
     if (!hasStartedEditing && onEditStart) {
