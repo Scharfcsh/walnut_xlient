@@ -1,73 +1,77 @@
-# React + TypeScript + Vite
+# Walnut UI (React + TypeScript + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A crisp React dashboard showcasing voice agent analytics with simple Supabase CRUD, Tailwind styling, and Recharts visualizations.
 
-Currently, two official plugins are available:
+## Features
+- React 19 + TypeScript + Vite
+- Tailwind-based theme (custom CSS variables)
+- Charts with Recharts (Area + Pie)
+- Simple Supabase CRUD: upsert per email, no auth
+- Clean UI components (cards, inputs, buttons)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
+- React, TypeScript, Vite
+- Tailwind CSS
+- Recharts
+- Supabase JS
+- Sonner (toasts)
 
-## React Compiler
+## Getting Started
+1. Install dependencies:
+   ```bash
+   pnpm install
+   # or npm install / yarn
+   ```
+2. Create environment file:
+   - Copy `.env.example` to `.env`
+   - Fill in:
+     ```env
+     VITE_SUPABASE_URL=your-project-url
+     VITE_SUPABASE_ANON_KEY=your-anon-key
+     ```
+3. Supabase table:
+   - Create Table in Supabase SQL editor and run it.
+   - This creates `user_analytics` with an `email` unique key and JSONB field `weekly_call_duration`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Scripts
+- Dev: `pnpm/npm dev`
+- Build: `pnpm/npm build`
+- Preview: `pnpm/npm preview`
+- Lint: `pnpm/npm lint`
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure
+```
+src/
+  components/
+    dashboard/
+      AnalyticsDashboard.tsx      # main page logic
+      CallDurationChart.tsx       # area chart (weekly durations)
+      SentimentChart.tsx          # pie chart (issues breakdown)
+      EditableChartForm.tsx       # edit and submit durations
+      EmailModal.tsx              # capture email once
+      navbar.tsx, footer.tsx, hero.tsx
+  lib/supabase.ts                 # supabase client
+  data/defaoutData.ts             # default dummy data
+  types/Analytics.ts              # shared types
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Usage Flow (Simple CRUD)
+- First time:
+  1. Click "Use Data" in the form
+  2. Enter your email in the modal
+  3. App upserts current chart data to Supabase
+- Subsequent edits:
+  1. Change values in the form
+  2. Click "Save Changes"
+  3. A small top popup asks to confirm
+  4. On confirm, app upserts to Supabase and updates the chart
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Data is saved under your email in `user_analytics.weekly_call_duration`.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+
+## Notes
+- This demo intentionally avoids full auth; it uses email as a simple key for CRUD.
+- For production, add proper RLS policies and authentication.
+
+## License
+MIT
